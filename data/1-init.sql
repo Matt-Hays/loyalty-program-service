@@ -1,0 +1,1 @@
+CREATE DATABASE IF NOT EXISTS loyalty_program_service;
