@@ -15,7 +15,6 @@ The Loyalty Service is a Spring Boot-based microservice designed to manage custo
 - [Installation](#installation)
 - [Running the Service](#running-the-service)
 - [Error Handling](#error-handling)
-- [License](#license)
 
 ---
 
