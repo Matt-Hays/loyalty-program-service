@@ -1,9 +1,9 @@
 package com.courseproject.loyaltyservice.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.UUID;
 
 @Entity
 @Getter
@@ -15,11 +15,12 @@ import java.util.UUID;
 public class Customer {
     @Id
     @Column(unique = true, nullable = false)
-    private UUID id;
+    private Long id;
 
     @Version
     private Long version;
 
-    @OneToOne
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private LoyaltyAccount loyaltyAccount;
 }

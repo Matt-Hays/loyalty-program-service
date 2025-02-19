@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -16,6 +15,7 @@ public class CustomerService {
     /**
      * Create a customer.
      * The provided customer <b>MUST</b> have a customer id set.
+     *
      * @param customer Customer with customer id set.
      * @return saved customer.
      */
@@ -24,7 +24,7 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
 
-    public Customer getCustomerById(UUID id) {
+    public Customer getCustomerById(Long id) {
         return customerRepository.findById(id).orElse(null);
     }
 
@@ -32,14 +32,14 @@ public class CustomerService {
         return customerRepository.findAll();
     }
 
-    public Customer updateCustomer(UUID id, Customer customer) {
+    public Customer updateCustomer(Long id, Customer customer) {
         Customer customerToUpdate = getCustomerById(id);
         if (customerToUpdate == null) return null;
         if (customer.getId() != null) customerToUpdate.setId(id);
         return customerRepository.save(customerToUpdate);
     }
 
-    public void deleteCustomer(UUID id) {
+    public void deleteCustomer(Long id) {
         customerRepository.deleteById(id);
     }
 }

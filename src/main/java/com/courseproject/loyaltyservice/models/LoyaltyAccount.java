@@ -1,12 +1,12 @@
 package com.courseproject.loyaltyservice.models;
 
 import com.courseproject.loyaltyservice.models.enums.MembershipLevel;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-
-import java.util.UUID;
 
 @Entity
 @Getter
@@ -17,8 +17,8 @@ import java.util.UUID;
 @ToString
 public class LoyaltyAccount {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @Version
     private Long version;
@@ -31,8 +31,9 @@ public class LoyaltyAccount {
     @NotNull
     private MembershipLevel membershipLevel = MembershipLevel.NONE;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @NotNull
     @JoinColumn(nullable = false)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private Customer customer;
 }

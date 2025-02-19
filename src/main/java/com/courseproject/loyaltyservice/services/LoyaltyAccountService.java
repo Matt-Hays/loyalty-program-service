@@ -1,5 +1,6 @@
 package com.courseproject.loyaltyservice.services;
 
+import com.courseproject.loyaltyservice.models.Customer;
 import com.courseproject.loyaltyservice.models.LoyaltyAccount;
 import com.courseproject.loyaltyservice.repositories.LoyaltyAccountRepository;
 import jakarta.transaction.Transactional;
@@ -8,18 +9,21 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @AllArgsConstructor
 public class LoyaltyAccountService {
     private final LoyaltyAccountRepository loyaltyAccountRepository;
+    private final CustomerService customerService;
 
     public LoyaltyAccount createLoyaltyAccount(LoyaltyAccount loyaltyAccount) {
+        Customer customer = customerService.getCustomerById(loyaltyAccount.getCustomer().getId());
+        customer.setLoyaltyAccount(loyaltyAccount);
+        loyaltyAccount.setCustomer(customer);
         return loyaltyAccountRepository.save(loyaltyAccount);
     }
 
-    public LoyaltyAccount getLoyaltyAccountById(UUID id) {
+    public LoyaltyAccount getLoyaltyAccountById(Long id) {
         return loyaltyAccountRepository.findById(id).orElse(null);
     }
 
@@ -28,7 +32,7 @@ public class LoyaltyAccountService {
     }
 
     @Transactional
-    public LoyaltyAccount updateLoyaltyAccount(UUID id, LoyaltyAccount loyaltyAccount) throws OptimisticLockingFailureException {
+    public LoyaltyAccount updateLoyaltyAccount(Long id, LoyaltyAccount loyaltyAccount) throws OptimisticLockingFailureException {
         LoyaltyAccount oldAccount = getLoyaltyAccountById(id);
         if (oldAccount == null) return null;
         if (loyaltyAccount.getBalance() != null) {
@@ -43,7 +47,7 @@ public class LoyaltyAccountService {
         return loyaltyAccountRepository.save(oldAccount);
     }
 
-    public void deleteLoyaltyAccountById(UUID id) {
+    public void deleteLoyaltyAccountById(Long id) {
         loyaltyAccountRepository.deleteById(id);
     }
 }

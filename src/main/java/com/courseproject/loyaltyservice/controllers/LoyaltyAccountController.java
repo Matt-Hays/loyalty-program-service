@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
+import java.lang.Long;
 
 @RestController
 @AllArgsConstructor
@@ -21,17 +21,22 @@ public class LoyaltyAccountController {
     }
 
     @GetMapping("/{id}")
-    public LoyaltyAccount getLoyaltyAccountById(@PathVariable UUID id) {
+    public LoyaltyAccount getLoyaltyAccountById(@PathVariable Long id) {
         return loyaltyAccountService.getLoyaltyAccountById(id);
     }
 
+    @PostMapping
+    public LoyaltyAccount createLoyaltyAccount(@RequestBody @Valid LoyaltyAccount loyaltyAccount) {
+        return loyaltyAccountService.createLoyaltyAccount(loyaltyAccount);
+    }
+
     @PatchMapping("/{id}")
-    public LoyaltyAccount updateLoyaltyAccount(@PathVariable UUID id, @RequestBody @Valid LoyaltyAccount loyaltyAccount) {
+    public LoyaltyAccount updateLoyaltyAccount(@PathVariable Long id, @RequestBody @Valid LoyaltyAccount loyaltyAccount) {
         return loyaltyAccountService.updateLoyaltyAccount(id, loyaltyAccount);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteLoyaltyAccountById(@PathVariable UUID id) {
+    public void deleteLoyaltyAccountById(@PathVariable Long id) {
         loyaltyAccountService.deleteLoyaltyAccountById(id);
     }
 }
