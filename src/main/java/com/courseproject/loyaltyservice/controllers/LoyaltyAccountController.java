@@ -8,6 +8,7 @@ import org.springframework.beans.InvalidPropertyException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.InvalidParameterException;
 import java.util.List;
 import java.lang.Long;
 
@@ -37,7 +38,7 @@ public class LoyaltyAccountController {
         try {
             LoyaltyAccount loyaltyAccount = loyaltyAccountService.creditPoints(id, points);
             return ResponseEntity.ok(loyaltyAccount);
-        } catch (InvalidPropertyException e) {
+        } catch (InvalidParameterException e) {
             return ResponseEntity.badRequest().build();
         }
     }
@@ -47,7 +48,7 @@ public class LoyaltyAccountController {
         try {
             LoyaltyAccount loyaltyAccount = loyaltyAccountService.deductPoints(id, points);
             return ResponseEntity.ok(loyaltyAccount);
-        } catch (InvalidPropertyException e) {
+        } catch (InvalidParameterException e) {
             return ResponseEntity.badRequest().build();
         }
     }
