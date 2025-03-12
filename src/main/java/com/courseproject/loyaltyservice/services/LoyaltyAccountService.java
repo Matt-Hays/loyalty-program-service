@@ -7,7 +7,9 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.security.InvalidParameterException;
 import java.util.List;
 
 @Service
@@ -20,6 +22,26 @@ public class LoyaltyAccountService {
         Customer customer = customerService.getCustomerById(loyaltyAccount.getCustomer().getId());
         customer.setLoyaltyAccount(loyaltyAccount);
         loyaltyAccount.setCustomer(customer);
+        return loyaltyAccountRepository.save(loyaltyAccount);
+    }
+
+    public LoyaltyAccount creditPoints(Long id, Double points) {
+        LoyaltyAccount loyaltyAccount = getLoyaltyAccountById(id);
+        if (loyaltyAccount == null || 0 > points) {
+            throw new InvalidParameterException();
+        };
+
+        loyaltyAccount.setBalance(loyaltyAccount.getBalance() + points);
+        return loyaltyAccountRepository.save(loyaltyAccount);
+    }
+
+    public LoyaltyAccount deductPoints(Long id, Double points) {
+        LoyaltyAccount loyaltyAccount = getLoyaltyAccountById(id);
+        if (loyaltyAccount == null || 0 > points || loyaltyAccount.getBalance() < points) {
+            throw new InvalidParameterException();
+        };
+
+        loyaltyAccount.setBalance(loyaltyAccount.getBalance() - points);
         return loyaltyAccountRepository.save(loyaltyAccount);
     }
 
