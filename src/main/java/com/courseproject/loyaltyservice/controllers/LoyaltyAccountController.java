@@ -4,13 +4,11 @@ import com.courseproject.loyaltyservice.models.LoyaltyAccount;
 import com.courseproject.loyaltyservice.services.LoyaltyAccountService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.InvalidPropertyException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.InvalidParameterException;
 import java.util.List;
-import java.lang.Long;
 
 @RestController
 @AllArgsConstructor
@@ -33,8 +31,8 @@ public class LoyaltyAccountController {
         return loyaltyAccountService.createLoyaltyAccount(loyaltyAccount);
     }
 
-    @PostMapping("/{id}/credit")
-    public ResponseEntity<LoyaltyAccount> creditPoints(@PathVariable Long id, @RequestParam("points") Double points) {
+    @PostMapping("/{id}/credit/{points}")
+    public ResponseEntity<LoyaltyAccount> creditPoints(@PathVariable Long id, @PathVariable("points") Double points) {
         try {
             LoyaltyAccount loyaltyAccount = loyaltyAccountService.creditPoints(id, points);
             return ResponseEntity.ok(loyaltyAccount);

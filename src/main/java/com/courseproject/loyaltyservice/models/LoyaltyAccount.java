@@ -32,8 +32,6 @@ public class LoyaltyAccount {
     private MembershipLevel membershipLevel = MembershipLevel.NONE;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @NotNull
-    @JoinColumn(nullable = false)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private Customer customer;
 }
