@@ -1,6 +1,7 @@
 package com.courseproject.loyaltyservice.controllers;
 
 import com.courseproject.loyaltyservice.models.LoyaltyAccount;
+import com.courseproject.loyaltyservice.models.dto.LoyaltyAccountDTO;
 import com.courseproject.loyaltyservice.services.LoyaltyAccountService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -27,8 +28,8 @@ public class LoyaltyAccountController {
     }
 
     @PostMapping
-    public LoyaltyAccount createLoyaltyAccount(@RequestBody @Valid LoyaltyAccount loyaltyAccount) {
-        return loyaltyAccountService.createLoyaltyAccount(loyaltyAccount);
+    public LoyaltyAccount createLoyaltyAccount(@RequestBody LoyaltyAccountDTO loyaltyAccountDTO) {
+        return loyaltyAccountService.createLoyaltyAccount(loyaltyAccountDTO);
     }
 
     @PostMapping("/{id}/credit/{points}")
@@ -52,7 +53,8 @@ public class LoyaltyAccountController {
     }
 
     @PatchMapping("/{id}")
-    public LoyaltyAccount updateLoyaltyAccount(@PathVariable Long id, @RequestBody @Valid LoyaltyAccount loyaltyAccount) {
+    public LoyaltyAccount updateLoyaltyAccount(@PathVariable Long id,
+            @RequestBody @Valid LoyaltyAccount loyaltyAccount) {
         return loyaltyAccountService.updateLoyaltyAccount(id, loyaltyAccount);
     }
 

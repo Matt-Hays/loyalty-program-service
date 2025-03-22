@@ -1,5 +1,6 @@
 package com.courseproject.loyaltyservice.services;
 
+import com.courseproject.loyaltyservice.models.dto.CustomerDTO;
 import com.courseproject.loyaltyservice.models.Customer;
 import com.courseproject.loyaltyservice.repositories.CustomerRepository;
 import lombok.AllArgsConstructor;
@@ -19,8 +20,12 @@ public class CustomerService {
      * @param customer Customer with customer id set.
      * @return saved customer.
      */
-    public Customer createCustomer(Customer customer) {
-        if (customer.getId() == null) return null;
+    public Customer createCustomer(CustomerDTO customerDTO) {
+        if (customerDTO.id() == null)
+            return null;
+        Customer customer = new Customer();
+        customer.setId(customerDTO.id());
+
         return customerRepository.save(customer);
     }
 
@@ -34,8 +39,10 @@ public class CustomerService {
 
     public Customer updateCustomer(Long id, Customer customer) {
         Customer customerToUpdate = getCustomerById(id);
-        if (customerToUpdate == null) return null;
-        if (customer.getId() != null) customerToUpdate.setId(id);
+        if (customerToUpdate == null)
+            return null;
+        if (customer.getId() != null)
+            customerToUpdate.setId(id);
         return customerRepository.save(customerToUpdate);
     }
 
