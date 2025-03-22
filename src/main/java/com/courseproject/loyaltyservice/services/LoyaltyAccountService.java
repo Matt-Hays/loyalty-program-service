@@ -2,12 +2,12 @@ package com.courseproject.loyaltyservice.services;
 
 import com.courseproject.loyaltyservice.models.Customer;
 import com.courseproject.loyaltyservice.models.LoyaltyAccount;
+import com.courseproject.loyaltyservice.models.dto.LoyaltyAccountDTO;
 import com.courseproject.loyaltyservice.repositories.LoyaltyAccountRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.InvalidParameterException;
 import java.util.List;
@@ -18,8 +18,11 @@ public class LoyaltyAccountService {
     private final LoyaltyAccountRepository loyaltyAccountRepository;
     private final CustomerService customerService;
 
-    public LoyaltyAccount createLoyaltyAccount(LoyaltyAccount loyaltyAccount) {
-        Customer customer = customerService.getCustomerById(loyaltyAccount.getCustomer().getId());
+    public LoyaltyAccount createLoyaltyAccount(LoyaltyAccountDTO loyaltyAccountDTO) {
+        Customer customer = customerService.getCustomerById(loyaltyAccountDTO.customerDTO().id());
+        LoyaltyAccount loyaltyAccount = new LoyaltyAccount();
+        loyaltyAccount.setBalance(loyaltyAccountDTO.balance());
+
         customer.setLoyaltyAccount(loyaltyAccount);
         loyaltyAccount.setCustomer(customer);
         return loyaltyAccountRepository.save(loyaltyAccount);
@@ -29,7 +32,8 @@ public class LoyaltyAccountService {
         LoyaltyAccount loyaltyAccount = getLoyaltyAccountById(id);
         if (loyaltyAccount == null || 0 > points) {
             throw new InvalidParameterException();
-        };
+        }
+        ;
 
         loyaltyAccount.setBalance(loyaltyAccount.getBalance() + points);
         return loyaltyAccountRepository.save(loyaltyAccount);
@@ -39,7 +43,8 @@ public class LoyaltyAccountService {
         LoyaltyAccount loyaltyAccount = getLoyaltyAccountById(id);
         if (loyaltyAccount == null || 0 > points || loyaltyAccount.getBalance() < points) {
             throw new InvalidParameterException();
-        };
+        }
+        ;
 
         loyaltyAccount.setBalance(loyaltyAccount.getBalance() - points);
         return loyaltyAccountRepository.save(loyaltyAccount);
@@ -54,13 +59,16 @@ public class LoyaltyAccountService {
     }
 
     @Transactional
-    public LoyaltyAccount updateLoyaltyAccount(Long id, LoyaltyAccount loyaltyAccount) throws OptimisticLockingFailureException {
+    public LoyaltyAccount updateLoyaltyAccount(Long id, LoyaltyAccount loyaltyAccount)
+            throws OptimisticLockingFailureException {
         LoyaltyAccount oldAccount = getLoyaltyAccountById(id);
-        if (oldAccount == null) return null;
+        if (oldAccount == null)
+            return null;
         if (loyaltyAccount.getBalance() != null) {
             Double newBalance = oldAccount.getBalance();
             newBalance -= loyaltyAccount.getBalance();
-            if (newBalance < 0) throw new IllegalArgumentException("Loyalty account balance cannot be negative");
+            if (newBalance < 0)
+                throw new IllegalArgumentException("Loyalty account balance cannot be negative");
             oldAccount.setBalance(newBalance);
         }
         if (loyaltyAccount.getMembershipLevel() != null) {

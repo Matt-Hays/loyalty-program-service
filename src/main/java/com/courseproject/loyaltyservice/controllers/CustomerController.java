@@ -1,5 +1,6 @@
 package com.courseproject.loyaltyservice.controllers;
 
+import com.courseproject.loyaltyservice.models.dto.CustomerDTO;
 import com.courseproject.loyaltyservice.models.Customer;
 import com.courseproject.loyaltyservice.services.CustomerService;
 import jakarta.validation.Valid;
@@ -26,8 +27,8 @@ public class CustomerController {
     }
 
     @PostMapping
-    public Customer createCustomer(@RequestBody @Valid Customer customer) {
-        return customerService.createCustomer(customer);
+    public Customer createCustomer(@RequestBody CustomerDTO customerDTO) {
+        return customerService.createCustomer(customerDTO);
     }
 
     @PatchMapping("/{id}")
