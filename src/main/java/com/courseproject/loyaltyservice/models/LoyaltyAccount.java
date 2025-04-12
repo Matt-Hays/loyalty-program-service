@@ -1,6 +1,6 @@
 package com.courseproject.loyaltyservice.models;
 
-import org.springframework.data.redis.core.RedisHash;
+import java.io.Serializable;
 
 import com.courseproject.loyaltyservice.models.enums.MembershipLevel;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -17,8 +17,7 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-@RedisHash("loyalty_account")
-public class LoyaltyAccount {
+public class LoyaltyAccount implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
