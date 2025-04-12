@@ -4,14 +4,20 @@ import com.courseproject.loyaltyservice.models.dto.CustomerDTO;
 import com.courseproject.loyaltyservice.models.Customer;
 import com.courseproject.loyaltyservice.repositories.CustomerRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class CustomerService {
     private final CustomerRepository customerRepository;
+
+    private final RedisTemplate<Long, Customer> redisTemplate;
 
     /**
      * Create a customer.
@@ -30,7 +36,13 @@ public class CustomerService {
     }
 
     public Customer getCustomerById(Long id) {
-        return customerRepository.findById(id).orElse(null);
+        Customer customer = redisTemplate.opsForValue().get(id);
+        if (customer == null) {
+            log.info("Customer {} was not found in Redis", id);
+            customer = customerRepository.findById(id).orElse(null);
+            redisTemplate.opsForValue().set(id, customer);
+        }
+        return customer;
     }
 
     public List<Customer> getAllCustomers() {

@@ -1,5 +1,7 @@
 package com.courseproject.loyaltyservice.models;
 
+import org.springframework.data.redis.core.RedisHash;
+
 import com.courseproject.loyaltyservice.models.enums.MembershipLevel;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -15,6 +17,7 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
+@RedisHash("loyalty_account")
 public class LoyaltyAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

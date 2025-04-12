@@ -7,6 +7,8 @@ import com.courseproject.loyaltyservice.repositories.LoyaltyAccountRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class LoyaltyAccountService {
     private final LoyaltyAccountRepository loyaltyAccountRepository;
     private final CustomerService customerService;
@@ -56,10 +59,11 @@ public class LoyaltyAccountService {
     public LoyaltyAccount getLoyaltyAccountById(Long id) {
         LoyaltyAccount a = redisTemplate.opsForValue().get(id);
         if (a == null) {
+            log.info("LoyaltyAccount {} not found in Redis", id);
             a = loyaltyAccountRepository.findById(id).orElseThrow(EntityNotFoundException::new);
             redisTemplate.opsForValue().set(a.getId(), a);
         }
-        return a != null ? a : loyaltyAccountRepository.findById(id).orElse(null);
+        return a;
     }
 
     public List<LoyaltyAccount> getAllLoyaltyAccounts() {

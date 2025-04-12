@@ -1,5 +1,7 @@
 package com.courseproject.loyaltyservice.models;
 
+import org.springframework.data.redis.core.RedisHash;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
@@ -12,6 +14,7 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
+@RedisHash("customer")
 public class Customer {
     @Id
     @Column(unique = true, nullable = false)
